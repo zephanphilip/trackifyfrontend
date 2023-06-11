@@ -1,0 +1,24 @@
+.Startup {
+    background: linear-gradient(to top, #DAF5FF, #B9E9FC);
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    
+}
+
+  .text{
+    
+    color: #95BDFF;
+    font-family:sans-serif;
+    font-size: 180;
+    font-weight: bold;
+    text-align: center;
+  }
+  .icon-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px; /* Add desired margin */
+  } 

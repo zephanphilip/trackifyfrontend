@@ -1,0 +1,103 @@
+import { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import form from 'react-bootstrap/Form';
+import axios from 'axios';
+import {useCookies} from 'react-cookie';
+import {useNavigate} from 'react-router-dom';
+import {
+    MDBContainer,
+    MDBTabs,
+    MDBTabsItem,
+    MDBTabsLink,
+    MDBTabsContent,
+    MDBTabsPane,
+    MDBBtn,
+    MDBIcon,
+    MDBInput,
+    MDBCheckbox
+  }
+  from 'mdb-react-ui-kit';
+
+
+export const Auth = () => {
+    return(<div>
+        <Login />
+        <Register />
+    </div>
+    );
+};
+
+
+
+const Login = () => { 
+    const[username, setUsername] = useState("")
+    const[password, setPassword] = useState("")
+
+    const [_, setCookies] = useCookies(['access_token'])
+    const navigate = useNavigate();
+
+    const onSubmit = async (event)=>{
+        event.preventDefault();
+        try {
+            const response = await axios.post("http://localhost:3001/auth/login",{username,password,})
+            console.log(response.data);
+            setCookies("access_token", response.data.token)
+            window.localStorage.setItem("userID", response.data.userID)
+            navigate("/home")
+        } catch (err) {
+            console.error(err);
+        }
+    }
+    return <Form 
+    label="Login"
+    username={username} 
+    setUsername={setUsername} 
+    password={password} 
+    setPassword={setPassword}
+    onSubmit={onSubmit}
+    />;
+}
+
+const Register = () => { 
+    const[username, setUsername] = useState("")
+    const[password, setPassword] = useState("")
+    const onSubmit = async (event) => {
+        event.preventDefault();
+        try{
+            await axios.post("http://localhost:3001/auth/register",{username,password,})
+        
+        alert("Successfully registered! Now login");
+        }catch(err){
+            console.error(err);
+        }
+
+    }
+    return( <Form 
+        username={username} 
+        setUsername={setUsername} 
+        password={password} 
+        setPassword={setPassword}
+        label="Register"
+        onSubmit={onSubmit}
+    />)
+}
+
+const Form =({username, setUsername, password, setPassword, label, onSubmit}) => {
+    return( <div>
+    <form onSubmit={onSubmit}>
+      <h2>{label}</h2>
+<form.Group className="mb-3" controlId="formBasicEmail">
+<form.Label htmlFor='username'>Username</form.Label>
+<form.Control id="username" value={username} type='text' placeholder="Enter Username" onChange={(event) => setUsername(event.target.value)} />
+</form.Group>
+
+<form.Group className="mb-3" controlId="formBasicPassword">
+<form.Label htmlFor='username'>Password</form.Label>
+<form.Control value={password} id="password" type="password" placeholder="Password" onChange={(event) => setPassword(event.target.value)}/>
+</form.Group>
+<Button variant="primary" type="submit">
+{label}
+</Button>
+</form>
+</div>
+)}
