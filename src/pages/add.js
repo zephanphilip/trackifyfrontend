@@ -22,6 +22,9 @@ import {
 
 export const Add = () => {
 
+    const navigate = useNavigate();
+
+
     const [loginRegisterActive, setLoginRegisterActive] = React.useState('Income');
     const handleLoginRegisterClick = (tab) => {
         setLoginRegisterActive(tab);
@@ -55,7 +58,8 @@ export const Add = () => {
           const handleSubmit = async (event) => {
             event.preventDefault();
             try {
-              await axios.post("http://localhost:3001/add/incomeadd",
+              // await axios.post("http://localhost:3001/add/incomeadd",
+              await axios.post("/api/add/incomeadd",
                 { ...incomeinfo },
                 {
                   headers: { authorization: cookies.access_token },
@@ -63,6 +67,8 @@ export const Add = () => {
               );
         
               alert("income added successfully");
+              navigate('/home');
+
             } catch (error) {
               console.error(error);
             }
@@ -70,14 +76,17 @@ export const Add = () => {
           const handleSubmit2 = async (event) => {
             event.preventDefault();
             try {
-              await axios.post("http://localhost:3001/add/expenseadd",
-                { ...expenseinfo },
+              // await axios.post("http://localhost:3001/add/expenseadd",
+              await axios.post("/api/add/expenseadd",
+               
+              { ...expenseinfo },
                 {
                   headers: { authorization: cookies.access_token },
                 }
               );
         
               alert("expense added successfully");
+              navigate('/home');
             } catch (error) {
               console.error(error);
             }
@@ -126,7 +135,7 @@ export const Add = () => {
                 name='idescription' 
                 id='form7Example2' 
                 label='Description' />
-                <Button  type='submit' >
+                <Button variant="outlined" type='submit' >
                 ADD
                 </Button>
 
@@ -151,7 +160,7 @@ export const Add = () => {
                 name='edescription' 
                 id='form7Example2' 
                 label='Description' />
-                <Button  type='submit' className='mb-3' >
+                <Button variant="outlined"  type='submit' className='mb-3' >
                 ADD
                 </Button>
 

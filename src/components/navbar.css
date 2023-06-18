@@ -1,12 +1,16 @@
-.navbar{
+.navbarr{
     margin: 0px;
-
+    width: 100%;
+    flex-direction: row;
+    display: flex;
+    height: 10%;
+    padding-bottom: 5px;
+    padding-top: 5px;
 }
 .nav{
     margin: 0;
     
 }
 .login-logout{
-    background-color: yellowgreen;
     padding-right: 100px;
 }

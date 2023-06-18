@@ -1,4 +1,12 @@
-import * as React from 'react';
+
+import axios from "axios";
+import { MDBContainer, MDBTable, MDBTableHead, MDBTableBody, MDBBadge, MDBBtn } from 'mdb-react-ui-kit';
+import { NavBar } from '../components/navbar';
+
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import '../components/navbar.css';
+import React, { useState,useEffect } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -16,10 +24,10 @@ import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import PersonIcon from '@mui/icons-material/Person';
 
+
 const pages = ['Home'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-
-export const NavBar = () => {
+export const Admin = () => {
   const navigate = useNavigate();
   const [cookies, setCookies] = useCookies(['access_token']);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -40,18 +48,42 @@ export const NavBar = () => {
     setAnchorElUser(null);
   };
 
-  const logout = () => {
-    setCookies('access_token', '');
-    navigate('/');
-    window.localStorage.removeItem('userID');
-    window.location.reload();
-  };
-  const profile = () => {
-    navigate('/profile');
-  };
 
-  return (
-    <AppBar position="static">
+    const [info, setInfo] = useState([]);
+    const logout = () => {
+      navigate("/");
+      window.location.reload();
+  }
+
+  
+    useEffect(() => {
+      axios
+        // .get("http://localhost:3001/auth/profile")
+        .get("/api/auth/profile")
+        
+        .then(result => setInfo(result.data))
+        .catch(error => console.error(error));
+    }, []);
+
+    const handleDelete1 = (id) => {
+        // axios.delete('http://localhost:3001/auth/profile/'+id)
+        axios.delete('/api/auth/profile/'+id)
+        .then(res=> {console.log(res)
+          window.location.reload();
+          alert("User deleted successfully");
+        })
+        .catch(err  => console.log(err))
+      };
+  
+    return (
+      <div>
+            {/* <div className="navbarr">
+              
+      
+            <p style={{marginLeft:"10px",marginTop:"9px", color: "#0084FE", fontFamily:"sans-serif", fontWeight: "bold" }}>TRACKIFY</p>
+            <Link style={{marginTop:"9px",marginLeft:"1540px",textDecoration: 'none', color: 'inherit',fontFamily:"sans-serif", fontWeight: "bold"}} className="mb-3" onClick={logout}>Logout</Link>
+        </div> */}
+        <AppBar position="static">
       <Toolbar disableGutters>
         <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
         <Typography
@@ -147,7 +179,7 @@ export const NavBar = () => {
               component={Link}
               to={'/' + page.toLowerCase()}
             >
-              {page}
+              
             </Button>
           ))}
         </Box>)}
@@ -155,7 +187,7 @@ export const NavBar = () => {
         <Box style={{paddingRight:"10px"}} sx={{ flexGrow: 0 }}>
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="Remy Sharp" url="https://cdn-icons-png.flaticon.com/512/6386/6386976.png" />
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
             </IconButton>
           </Tooltip>
           <Menu
@@ -174,112 +206,53 @@ export const NavBar = () => {
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
-            {!cookies.access_token ? (
-              <MenuItem onClick={handleCloseUserMenu} component={Link} to="/auth">
-                <Typography textAlign="center">Login/Register</Typography>
-              </MenuItem>
-            ) : (
               <MenuItem onClick={logout}>
                 <Typography textAlign="center">Logout</Typography>
               </MenuItem>
-            )}
-            {!cookies.access_token ? (
-              <MenuItem onClick={handleCloseUserMenu} component={Link} to="/">
-                <Typography textAlign="center"></Typography>
-              </MenuItem>
-            ) : (
-              <MenuItem onClick={profile}>
-                <Typography textAlign="center">Profile</Typography>
-              </MenuItem>
-            )}
+            
           </Menu>
         </Box>
       </Toolbar>
     </AppBar>
-  );
-}
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import { Link } from "react-router-dom";
-// import Container from "react-bootstrap/Container";
-// import Nav from "react-bootstrap/Nav";
-// import './navbar.css'
-// import {useCookies} from 'react-cookie';
-// import {useNavigate} from 'react-router-dom';
-// import PersonIcon from '@mui/icons-material/Person';
-
-
-// export const NavBar = () => {
-//   const navigate = useNavigate();
-
-//   const [cookies, setCookies] = useCookies(['access_token']);
-
-//     const logout = () => {
-//         setCookies("access_token","");
-//         navigate("/");
-//         window.localStorage.removeItem('userID');
-//         window.location.reload();
-//     }
-//     // const login = () => {
-//     //     navigate("/auth");
-//     //     window.location.reload();
-//     // }
-//     // const profile = () => {
-//     //     navigate("/profile");
-//     //     window.location.reload();
-//     // }
-//     // const home = () => {
-//     //     navigate("/home");
-//     //     window.location.reload();}
-//     return (
-
-//         <div className="navbarr">
-//              <p style={{marginLeft:"10px",marginTop:"9px", color: "white",fontSize:"large", fontFamily:"sans-serif", fontWeight: "bold" }}>TRACKIFY</p>
-//              {!cookies.access_token ? (<p><Link to='/' style={{marginLeft:"30px" }}></Link></p>):(<Link to='/home' style={{marginTop:"9px",marginLeft:"15px",textDecoration: 'none', color: 'inherit',fontFamily:"sans-serif", fontWeight: "bold"}}>Home</Link>)}
-//             <Link style={{marginTop:"9px",}} to='/profile'> <PersonIcon style={{textDecoration: 'none', color: 'black',fontFamily:"sans-serif", fontWeight: "bold"}}/></Link>
-//              {!cookies.access_token ? (<Link  style={{backgroundColor:"none", marginRight: '26' ,marginTop:"9px",textDecoration: 'none', color: 'inherit',fontFamily:"sans-serif", fontWeight: "bold"}} to="/auth">Login/Register</Link>) : (<Link style={{marginTop:"9px",marginLeft:"15px",textDecoration: 'none', color: 'inherit',fontFamily:"sans-serif", fontWeight: "bold"}} className="mb-3" onClick={logout}>Logout</Link>)}
-//          </div>
-//             );
-//         };
- 
-    //     <Box sx={{ flexGrow: 1 }}>
-    //     <AppBar position="static">
-    //       <Toolbar>
-    //         <IconButton
-    //           size="medium"
-    //           edge="start"
-    //           color="inherit"
-    //           aria-label="menu"
-    //           sx={{ mr: 2 }}
-    //         >
-    //           <p style={{marginLeft:"10px",marginTop:"9px", color: "white", fontFamily:"sans-serif", fontWeight: "bold" }}>TRACKIFY</p>
-    //         </IconButton>
-    //         {!cookies.access_token ?(<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}> 
-    //         </Typography>):(<Button onClick={home} color="inherit">Home</Button>)}
-    //         <Button onClick={profile} color="inherit">Profile</Button>
-    //         {!cookies.access_token ?(<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}> 
-    //         </Typography>):(<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-    //           Home
-    //         </Typography>)}
-    //         {!cookies.access_token ? (<Button onClick={login} color="inherit">Login/Register</Button>) : (<Button color="inherit" onClick={logout}>Logout</Button>)}
-    //       </Toolbar>
-    //     </AppBar>
-    //   </Box>
- 
+        <p style={{marginLeft:"5px",marginTop:"9px",fontSize:"40px", color: "#0084FE", fontFamily:"sans-serif", fontWeight: "bold" }}>ADMIN DASHBOARD</p>
+      
+        <section style={{ flex: "1", marginRight: "10px" }}>
+          <div className="shadow-4 rounded-5 overflow-hidden">
+            <MDBTable>
+              <MDBTableHead light>
+                <tr>
+                  <th>Name</th>
+                  <th>username</th>
+                  <th>Actions</th>
+                </tr>
+              </MDBTableHead>
+              <MDBTableBody style={{ verticalAlign: "middle" }}>
+                {info &&
+                  info.map(user => (
+                    <tr key={user.id}>
+                      <td>
+                        <p className="fw-bold mb-1">{user.name}</p>
+                      </td>
+                      <td>
+                        <p className="fw-bold mb-1">{user.username}</p>
+                      </td>
+                      <td>
+                        <Button onClick={(e) => handleDelete1(user._id)} variant="outlined" color="error" style={{ marginLeft: '10px' }}>
+                          Delete
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+              </MDBTableBody>
+            </MDBTable>
+          </div>
+        </section>
+      </div>
+    );
+  };
+  

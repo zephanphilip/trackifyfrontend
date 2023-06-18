@@ -1,0 +1,21 @@
+.profileform {
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .fields {
+    
+    justify-content: center;
+    align-content: center;
+    margin-bottom: 10px;
+  }
+  
+  .text1 {
+    text-align: left;
+  }
+  
+  .form {
+    width: 400px; /* adjust the width of the form as needed */
+  }
+  
