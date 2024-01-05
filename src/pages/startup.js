@@ -159,7 +159,7 @@ export const Startup = () => {
                 <section class="header">
   <div class="title-wrapper">
     <h1 class="sweet-title">
-      <span data-text="Sweet">Trackify</span>
+      <span data-text="">Trackify</span>
     </h1>
     <span class="top-title">Welcome to </span>
     <span class="bottom-title">your ultimate expense tracking solution!</span>
